@@ -13,7 +13,7 @@ def submit():
     raca = request.form.get('raca')
     idade = request.form.get('idade')
     peso = request.form.get('peso')
-    vacinado = request.form.get('vacinado')
+    vacinado = request.form.get('vacinado', 'não')  # Default to 'não' if not set
 
     # Validate and process data
     try:

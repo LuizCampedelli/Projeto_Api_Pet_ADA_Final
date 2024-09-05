@@ -11,7 +11,7 @@
     <p><strong>Raça:</strong> {{ raca }}</p>
     <p><strong>Idade:</strong> {{ idade }} anos</p>
     <p><strong>Peso:</strong> {{ peso }} kg</p>
-    <p><strong>Vacinado:</strong> {{ 'Sim' if vacinado == 'sim' else 'Não' }}</p>
+    <p><strong>Vacinado:</strong> {% if vacinado == 'sim' %} Sim {% else %} Não {% endif %}</p>
     <br>
     <a href="/">Voltar</a>
 </body>
