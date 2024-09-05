@@ -32,6 +32,7 @@ def coletar_informacoes_pet():
     # Exibindo as informações coletadas
     print("\nInformações do pet:")
     print(f"Nome: {nome}")
+    print(f"Raça: {raca}")
     print(f"Idade: {idade} anos")
     print(f"Peso: {peso} kg")
 
