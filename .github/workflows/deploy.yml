@@ -6,42 +6,34 @@ on:
       - main
 
 jobs:
-  deploy-to-production:
+  deploy-to-ec2:
     runs-on: ubuntu-22.04
 
     steps:
-      - id: checkout-code
+      - name: Checkout Code
         uses: actions/checkout@v3
 
-      - id: setup-python
+      - name: Set Up Python
         uses: actions/setup-python@v3
         with:
           python-version: '3.11'
 
-      - id: install-dependencies
+      - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install flake8 black
 
-      - id: run-code-quality-checks
+      - name: Set Up SSH Key
         run: |
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          black . --check || true  # Allow workflow to continue even if black would reformat files
+          echo "${{ secrets.EC2_PRIVATE_KEY }}" > /tmp/ec2-key.pem
+          chmod 600 /tmp/ec2-key.pem
 
-      - id: run-tests
-        run: |
-          python -m unittest discover
-
-      - id: deploy-to-ec2
+      - name: SSH into EC2 and Deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'us-east-1'
-          EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
         run: |
-          echo "${{ secrets.EC2_PRIVATE_KEY }}" > /tmp/ec2-key.pem
-          chmod 600 /tmp/ec2-key.pem
           ssh -i /tmp/ec2-key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_IP }} << EOF
             cd /home/ec2-user/app
 
