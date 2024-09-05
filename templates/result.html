@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações do Pet</title>
+</head>
+<body>
+    <h1>Informações do pet</h1>
+    <p><strong>Nome:</strong> {{ nome }}</p>
+    <p><strong>Raça:</strong> {{ raca }}</p>
+    <p><strong>Idade:</strong> {{ idade }} anos</p>
+    <p><strong>Peso:</strong> {{ peso }} kg</p>
+    <p><strong>Vacinado:</strong> {{ 'Sim' if vacinado == 'sim' else 'Não' }}</p>
+    <br>
+    <a href="/">Voltar</a>
+</body>
+</html>
