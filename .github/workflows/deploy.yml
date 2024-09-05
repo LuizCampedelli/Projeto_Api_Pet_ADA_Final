@@ -1,0 +1,71 @@
+
+name: Deploy-to-EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-to-production:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - id: checkout-code
+        uses: actions/checkout@v3
+
+      - id: setup-python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.11'
+
+      - id: install-dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - id: run-code-quality-checks
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          black . --check
+
+      - id: run-tests
+        run: |
+          python -m unittest discover
+
+      - id: deploy-to-ec2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'us-east-1'
+          EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
+        run: |
+          echo "${{ secrets.EC2_PRIVATE_KEY }}" > /tmp/ec2-key.pem
+          chmod 600 /tmp/ec2-key.pem
+          ssh -i /tmp/ec2-key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_IP }} << EOF
+            cd /home/ec2-user/app
+
+            # Pull the latest code
+            git pull origin main
+
+            # Ensure virtual environment exists, create if not
+            if [ ! -d "/home/ec2-user/myenv" ]; then
+              python3 -m venv /home/ec2-user/myenv
+            fi
+
+            # Activate virtual environment
+            . /home/ec2-user/myenv/bin/activate
+
+            # Install requirements
+            pip install --upgrade pip
+            pip install -r requirements.txt
+
+            # Stop any existing Gunicorn process on port 5000
+            sudo fuser -k 5000/tcp || true
+
+            # Start Gunicorn
+            nohup gunicorn --bind 0.0.0.0:5000 app:app > gunicorn.log 2>&1 & disown
+
+            # Log message for successful deployment
+            echo "Deployment completed successfully!"
+          EOF
