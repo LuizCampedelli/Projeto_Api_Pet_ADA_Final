@@ -43,5 +43,6 @@ def coletar_informacoes_pet():
     print(f"Peso: {peso} kg")
     print(f"Vacinado: {'Sim' if vacinado == 'sim' else 'Não'}")
 
+
 # Chama a função para coletar e exibir as informações do pet
 coletar_informacoes_pet()

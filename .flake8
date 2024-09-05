@@ -1,7 +1,7 @@
 [flake8]
-max-line-length = 88  # Default is 79, you can change this to fit your team's style.
-ignore = E203, E266, E501, W503  # You can ignore specific error codes.
-max-complexity = 10  # Set the maximum complexity for cyclomatic complexity checks.
+max-line-length = 88
+ignore = E203, E266, E501, W503
+max-complexity = 10
 exclude =
     .git,
     __pycache__,
