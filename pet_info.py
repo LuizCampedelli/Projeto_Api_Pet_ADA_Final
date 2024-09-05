@@ -29,12 +29,19 @@ def coletar_informacoes_pet():
         except ValueError:
             print("Por favor, insira um número válido para o peso.")
 
+    # Coleta da informação de vacinação
+    vacinado = input("O pet está vacinado? (sim/não): ").strip().lower()
+    if vacinado not in ["sim", "não"]:
+        print("Por favor, responda com 'sim' ou 'não'.")
+        vacinado = input("O pet está vacinado? (sim/não): ").strip().lower()
+
     # Exibindo as informações coletadas
     print("\nInformações do pet:")
     print(f"Nome: {nome}")
     print(f"Raça: {raca}")
     print(f"Idade: {idade} anos")
     print(f"Peso: {peso} kg")
+    print(f"Vacinado: {'Sim' if vacinado == 'sim' else 'Não'}")
 
 # Chama a função para coletar e exibir as informações do pet
 coletar_informacoes_pet()
