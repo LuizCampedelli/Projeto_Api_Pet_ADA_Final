@@ -35,18 +35,18 @@ jobs:
           AWS_REGION: 'us-east-1'
         run: |
           ssh -i /tmp/ec2-key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_IP }} << EOF
-            # Create the /home/ec2-user/app directory if it doesn't exist
+            # Remove the /home/ec2-user/app directory if it exists
+            if [ -d "/home/ec2-user/app" ]; then
+              echo "Removing existing /home/ec2-user/app directory..."
+              sudo rm -rf /home/ec2-user/app
+            fi
+
+            # Recreate the /home/ec2-user/app directory
             mkdir -p /home/ec2-user/app
             cd /home/ec2-user/app
 
             # Install git if not already installed
             sudo yum install -y git || sudo apt-get install -y git
-
-            # Check if the directory is already a git repository
-            if [ -d ".git" ]; then
-              echo "Existing repository found, removing it..."
-              sudo rm -rf /home/ec2-user/app/* /home/ec2-user/app/.* 2> /dev/null || true
-            fi
 
             # Clone the repository again
             git clone https://github.com/LuizCampedelli/Projeto_Api_Pet_ADA_Final.git .
