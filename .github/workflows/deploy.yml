@@ -42,12 +42,14 @@ jobs:
             # Install git if not already installed
             sudo yum install -y git || sudo apt-get install -y git
 
-            # Clone the repository if .git directory doesn't exist, otherwise pull latest changes
-            if [ ! -d ".git" ]; then
-              git clone https://github.com/LuizCampedelli/Projeto_Api_Pet_ADA_Final.git .
-            else
-              git pull origin main
+            # Check if the directory is already a git repository
+            if [ -d ".git" ]; then
+              echo "Existing repository found, removing it..."
+              rm -rf /home/ec2-user/app/*
             fi
+
+            # Clone the repository again
+            git clone https://github.com/LuizCampedelli/Projeto_Api_Pet_ADA_Final.git .
 
             # Ensure virtual environment exists, create if not
             if [ ! -d "/home/ec2-user/myenv" ]; then
@@ -57,9 +59,9 @@ jobs:
             # Activate virtual environment
             . /home/ec2-user/myenv/bin/activate
 
-            # Install requirements
-            pip install --upgrade pip
+            # Install requirements if requirements.txt exists
             if [ -f requirements.txt ]; then
+              pip install --upgrade pip
               pip install -r requirements.txt
             else
               echo "requirements.txt file not found!"
