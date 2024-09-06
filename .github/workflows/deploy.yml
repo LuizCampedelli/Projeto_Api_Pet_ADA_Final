@@ -45,7 +45,7 @@ jobs:
             # Check if the directory is already a git repository
             if [ -d ".git" ]; then
               echo "Existing repository found, removing it..."
-              rm -rf /home/ec2-user/app/* /home/ec2-user/app/.* 2> /dev/null || true
+              sudo rm -rf /home/ec2-user/app/* /home/ec2-user/app/.* 2> /dev/null || true
             fi
 
             # Clone the repository again
