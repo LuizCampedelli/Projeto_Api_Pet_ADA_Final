@@ -7,6 +7,12 @@ on:
 
 jobs:
   deploy-to-ec2:
+    if: |
+      !contains(github.event.head_commit.message, '[skip ci]') &&
+      !contains(github.event.head_commit.message, '[ci skip]') &&
+      !contains(github.event.head_commit.message, '[no ci]') &&
+      !contains(github.event.head_commit.message, '[skip actions]') &&
+      !contains(github.event.head_commit.message, '[actions skip]')
     runs-on: ubuntu-latest
 
     steps:
@@ -59,7 +65,7 @@ jobs:
             # Activate virtual environment
             . /home/ec2-user/myenv/bin/activate
 
-            # Install requirements if requirements.txt exists
+            # Install requirements, including Flask
             if [ -f requirements.txt ]; then
               pip install --upgrade pip
               pip install -r requirements.txt
@@ -67,10 +73,13 @@ jobs:
               echo "requirements.txt file not found!"
             fi
 
+            # Install Flask explicitly if missing from requirements.txt
+            pip install flask
+
             # Stop any existing Gunicorn process on port 5000
             sudo fuser -k 5000/tcp || true
 
-            # Start Gunicorn
+            # Start Gunicorn to serve the Flask app
             nohup gunicorn --bind 0.0.0.0:5000 app:app > gunicorn.log 2>&1 & disown
 
             # Log message for successful deployment

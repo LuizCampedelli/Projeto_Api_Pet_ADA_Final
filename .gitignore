@@ -2,8 +2,5 @@
 .venv
 venv/
 myvenv/
-README.md
-CONTRIBUTING.md
-LICENSE.md
 myenv/
 __pycache__/
