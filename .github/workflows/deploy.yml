@@ -42,8 +42,12 @@ jobs:
             # Install git if not already installed
             sudo yum install -y git || sudo apt-get install -y git
 
-            # Pull the latest code from the repository
-            git pull origin main
+            # Clone the repository if .git directory doesn't exist, otherwise pull latest changes
+            if [ ! -d ".git" ]; then
+              git clone https://github.com/LuizCampedelli/Projeto_Api_Pet_ADA_Final.git .
+            else
+              git pull origin main
+            fi
 
             # Ensure virtual environment exists, create if not
             if [ ! -d "/home/ec2-user/myenv" ]; then
