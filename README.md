@@ -93,6 +93,64 @@ gunicorn --bind 0.0.0.0:5000 app:app
 http://localhost:5000
 ```
 
+## Como implantar na AWS usando Github Actions
+
+1. Crie uma conta na AWS e configure o acesso programático.
+2. Crie uma EC2, com chave de SSH, baixe a chave para um local seguro.
+3. Crie um Security Group para a EC2, com as portas 22 e 5000 abertas.
+4. Adicione os segredos em varias e segredos do actions na aba Settings do repositório, com as seguintes chaves:
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
+  - AWS_REGION
+  - EC2_IP
+  - EC2_PRIVATE_KEY
+
+5. Faça um push na branch "main" e veja a pipeline de deploy ser executada.
+
+## Observações
+
+- Caso queira fazer modificações sem dar gatilho no deploy, faça commits assim:
+
+  ```bash
+  git commit -m 'feat/nome_da_feature [skip actions]'
+  ```
+
+  ### São suportados para dar skip actions os seguintes tipos no commit:
+
+  - [skip ci]
+  - [ci skip]
+  - [no ci]
+  - [skip actions]
+  - [actions skip]
+
+  ### Exemplo de commit com skip actions:
+
+  ```bash
+  git commit -m "Update docs [skip ci]"
+  git commit -m "Fix typo [ci skip]"
+  git commit -m "Minor change [no ci]"
+  git commit -m "Change config [skip actions]"
+  git commit -m "Update dependencies [actions skip]"
+  ```
+
+### Boas práticas
+
+- Caso não queira enviar os arquivos de README e docs para o deploy, adicone no seu deploy:
+
+```bash
+  on:
+    push:
+      branches:
+        - main
+      paths-ignore:
+        - 'docs/**'
+        - 'README.md'
+```
+
+## Licença
+
+Este projeto está sob a licença do MIT. Consulte a [LICENSE](LICENSE) para obter mais informações.
+
 
 ## Como contribuir
 
