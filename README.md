@@ -6,4 +6,4 @@
 
 ## Resultado final
 
-![ec2 ssh app running](docs/assets/ec2_ssh_app_running.png)
+![ec2_cli](docs/assets/ec2_cli.png)
