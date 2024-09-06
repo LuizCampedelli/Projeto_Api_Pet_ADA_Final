@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy-to-ec2:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
@@ -35,9 +35,14 @@ jobs:
           AWS_REGION: 'us-east-1'
         run: |
           ssh -i /tmp/ec2-key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_IP }} << EOF
+            # Create the /home/ec2-user/app directory if it doesn't exist
+            mkdir -p /home/ec2-user/app
             cd /home/ec2-user/app
 
-            # Pull the latest code
+            # Install git if not already installed
+            sudo yum install -y git || sudo apt-get install -y git
+
+            # Pull the latest code from the repository
             git pull origin main
 
             # Ensure virtual environment exists, create if not
@@ -50,7 +55,11 @@ jobs:
 
             # Install requirements
             pip install --upgrade pip
-            pip install -r requirements.txt
+            if [ -f requirements.txt ]; then
+              pip install -r requirements.txt
+            else
+              echo "requirements.txt file not found!"
+            fi
 
             # Stop any existing Gunicorn process on port 5000
             sudo fuser -k 5000/tcp || true
