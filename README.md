@@ -6,6 +6,4 @@
 
 ## Resultado final
 
-![ec2 ssh app running](https://github.com/user-attachments/assets/004205ac-1ca8-4c66-8f3e-333ccf69e14a)
-
-
+![ec2 ssh app running](docs/assets/ec2_ssh_app_running.png)
