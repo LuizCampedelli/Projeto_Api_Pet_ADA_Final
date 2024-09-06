@@ -103,6 +103,12 @@ http://localhost:5000
 
 5. Push to the "main" branch and watch the deployment pipeline run.
 
+6. Access the application from browser
+
+```bash
+http://<EC2_IP>:5000
+```
+
 ## Notes
 
 - If you want to make changes without triggering the deploy, commit like this:

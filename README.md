@@ -107,6 +107,12 @@ http://localhost:5000
 
 5. Faça um push na branch "main" e veja a pipeline de deploy ser executada.
 
+6. Acesse a aplicação no navegador
+
+```bash
+http://<EC2_IP>:5000
+```
+
 ## Observações
 
 - Caso queira fazer modificações sem dar gatilho no deploy, faça commits assim:
