@@ -4,7 +4,7 @@
 
 ### Este projeto é uma aplicação em Python 3.11, com a função de treinar o desenvolvimento de uma pipeline para o deploy de quaisquer mudanças realizadas na branch "main", com um gatilho para atualizar uma instancia EC2 na nuvem AWS.
 
-## Resultado final
+## Resultado final:
 
 ![ec2_app_1](docs/assets/Pet_info_index.png)
 
