@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - 'docs/**'
-      - 'README.md'
-      - 'README_EN.md'
-      - 'LICENSE'
+    # paths-ignore:
+    #   - 'docs/**'
+    #   - 'README.md'
+    #   - 'README_EN.md'
+    #   - 'LICENSE'
 
 jobs:
   deploy-to-ec2:
